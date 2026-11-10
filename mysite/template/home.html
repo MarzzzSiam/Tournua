@@ -1,0 +1,245 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-[#001717]">
+    <header>
+        <div class="navbar shadow-sm px-2 py-6 lg:p-6">
+            <div class="navbar-start">
+                <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost lg:hidden text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                    </svg>
+                </div>
+                <ul tabindex="0"
+                    class="menu menu-sm dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow text-white bg-[#001717]">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Tournament</a></li>
+                    <li><a href="">About us</a></li>
+                </ul>
+                </div>
+                <a class="btn btn-ghost text-[28px] text-[#FFFFFF] font-cs-gelios">Tournua</a>
+            </div>
+
+            <div class="navbar-center hidden lg:flex">
+                <ul class="menu menu-horizontal px-1 text-white">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Tournament</a></li>
+                    <li><a href="">About us</a></li>
+                </ul>
+            </div>
+
+            <div class="navbar-end flex gap-4">
+                <a href="{% url 'login' %}" class="btn bg-[#000000] text-white rounded-3xl lg:px-6 border-[#13898B] border-2">Log in</a>
+                <a href="{% url 'signup' %}" class="btn relative inline-block lg:px-6 py-2 px-4 rounded-3xl text-white bg-black">
+                    <span class="absolute inset-0 rounded-3xl p-[2px] bg-gradient-to-r from-[#13898B] via-[#14D5D4] via-[#0C6083] to-[#118285]"></span>
+                    <span class="relative z-10">Sign Up</span>
+                </a>
+
+            </div>
+        </div>
+
+    </header>
+
+    <main class="">
+
+        <section class="flex items-center justify-center gap-4 ">
+            <div class="mx-left h-[400px] w-[110px] bg-cover mb-80 hidden lg:block" style="background-image: url('{% static 'images/bgLishtRight.png' %}');">
+                <img src="{% static 'images/bird.png' %}" alt="" class="h-100 w-100">
+            </div>
+
+           <div class="mx-auto h-auto lg:h-[900px] lg:w-[1100px] bg-cover bg-center"
+                style="background-image: url('{% static 'images/trophy1.png' %}');">
+
+
+                <div class="flex flex-col items-center justify-center h-full text-center font-poppins mt-30 lg:mt-0">
+                    <h1 class="text-4xl lg:text-6xl font-cs-gelios text-[#13898B]">Generate, Manage and Track Tournaments<br> </h1>
+                    <h1 class="text-3xl font-cs-gelios text-white mt-4">All in One Place</h1>
+                    <p class="text-lg text-white mb-12 mt-3">No more messy arrangements! <br>
+    Whether it’s friends, clubs, or communities, Tournuá makes every<br> match exciting with easy score tracking and live standings."</p>
+
+
+                    <div class="flex flex-col lg:flex-row gap-6 lg:gap-14 mb-20">
+                        <a class="btn bg-[#000000] text-white rounded-3xl px-6 border-[#13898B] border-2">Create A New Tournament</a>
+                        <label for="add_tournament" class="btn bg-[#000000] text-white rounded-3xl px-6 border cursor-pointer">
+                            Follow A Public Tournament
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mx-left h-[400px] w-[100px] bg-cover mb-80 hidden lg:block" style="background-image: url('{% static 'images/bgLight.png' %}');">
+                <img src="{% static 'images/birdsRight.png' %}" alt="" class="h-100 w-200">
+            </div>
+
+
+        </section>
+
+        <section class="mb-20">
+
+            <div class="lg:w-8/12 lg:mx-auto h-auto mx-5">
+                <h1 class="text-4xl font-cs-gelios text-white mb-5">Tournament</h1>
+                <div class="lg:w-[450px] lg:h-[250px] flex items-center justify-center
+                rounded-xl border-2 border-white/30
+                 bg-white/4 backdrop-blur-md shadow-xl p-20 lg:p-0">
+                    <p class="text-white text-lg">You need to <a href="" class="text-teal-400 italic">Log In</a> first.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="lg:w-8/12 mx-auto h-auto mb-25">
+            <div class="mx-5 lg:mx-0 text-center lg:text-left">
+                <h1 class="text-4xl font-cs-gelios text-white mb-5">About Us</h1>
+                <p class="text-xl text-white font-poppins">At Tournua, we believe tournaments should be seamless, fair, and fun. Whether it’s traditional sports or eSports, organizing and tracking competitions shouldn’t be a hassle.<br>
+                That’s why we built Tournua – From Registration to Victory, Seamlessly. Our platform helps organizers create tournaments, manage teams, generate fixtures, update scores in real time, and keep participants informed every step of the way.</p>
+            </div>
+            <div class="h-auto rounded-3xl border-2 border-white/30 bg-white/5 backdrop-blur-md shadow-xl grid lg:grid-cols-3 gap-4 mt-10 p-6 mx-5 lg:mx-0">
+                <div class="border-b-1 lg:border-b-0 border-b-white lg:border-r-1 border-r-white class flex flex-col justify-center items-center gap-5 px-2 py-6">
+
+                    <div class="h-24 w-24 bg-white/6 backdrop-blur-md shadow-xl rounded-lg flex items-center justify-center mb-2">
+                        <p class="text-white text-6xl"><i class="bi bi-rocket-takeoff"></i></p>
+                    </div>
+                    <p class="text-white text-2xl mb-2">Simplify Management</p>
+                    <p class="text-white text-[18px] text-center font-poppins">Easily create, organize, and manage tournaments without manual work.</p>
+
+                </div>
+
+                <div class="border-b-1 lg:border-b-0 border-b-white lg:border-r-1 border-r-white class flex flex-col justify-center items-center gap-5 px-2 py-6">
+
+                    <div class="h-24 w-24 bg-white/6 backdrop-blur-md shadow-xl rounded-lg flex items-center justify-center mb-2">
+                        <img src="{% static 'images/1.png' %}" alt="" class="h-22 w-22">
+                    </div>
+                    <p class="text-white text-center text-2xl mb-2">Automatic Fixtures & Tracking</p>
+                    <p class="text-white text-[18px] text-center font-poppins">Generate match schedules instantly and track progress with ease.</p>
+
+                </div>
+
+                <div class="flex flex-col justify-center items-center gap-5 px-2 py-6">
+
+                    <div class="h-24 w-24 bg-white/6 backdrop-blur-md shadow-xl rounded-lg flex items-center justify-center mb-2">
+                        <img src="{% static 'images/2.png' %}" alt="" class="h-22 w-22">
+                    </div>
+                    <p class="text-white text-2xl mb-2">Smooth Experience</p>
+                    <p class="text-white text-[18px] text-center font-poppins">Provide organizers and participants a clear, engaging and user-friendly journey.</p>
+
+                </div>
+
+            </div>
+        </section>
+
+
+
+    </main>
+
+    <footer class="w-full h-auto lg:h-90 overflow-hidden bg-white/6 backdrop-blur-md rounded-t-3xl lg:px-20 lg:pt-10 ">
+
+        <div class="flex flex-col lg:flex-row justify-start lg:justify-between lg:items-center p-6 font-poppins">
+
+            <div class="text-white flex flex-col items-start lg:justify-center lg:items-center gap-4 mb-8 lg:mb-0  lg:hidden">
+                <h1 class="text-2xl lg:text-3xl font-bold">Got a Tournament? Want to collaborate? </h1>
+                <button class="bg-gradient-to-r from-[#14D5D4] to-[#0C6083] text-white text-xl rounded-xl py-1 px-4">Subscribe  <i class="bi bi-play-fill"></i></button>
+            </div>
+
+            <div class="text-white mb-8 lg:mb-0">
+                <p class="text-[18px] mb-4">Contact</p>
+                <p class="text-xl font-semibold mb-2">tournua@gmail.com</p>
+                <p class="text-xl font-semibold">+880 1976 295575</p>
+            </div>
+
+            <div class="text-white hidden lg:flex lg:flex-col lg:justify-between lg:items-center gap-4">
+                <h1 class="text-2xl lg:text-3xl font-bold">Got a Tournament? Want to collaborate? </h1>
+                <button class="bg-gradient-to-r from-[#14D5D4] to-[#0C6083] text-white text-xl rounded-xl py-1 px-4">Subscribe  <i class="bi bi-play-fill"></i></button>
+            </div>
+
+            <div class="text-white">
+                <p class="text-[18px] mb-4">Bangladesh</p>
+                <p class="text-xl font-semibold mb-1">74/A, Green Road,</p>
+                <p class="text-xl font-semibold">Dhaka-1205, Bangladesh</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-2 lg:gap-0 justify-between items-center pt-4 text-white">
+            <p>© Copyright 2025. Team Tournuá. All rights reserved.</p>
+            <a href="" class="lg:mr-80">Terms & Conditions</a>
+
+            <div class="flex gap-4">
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-linkedin"></i></a>
+            </div>
+        </div>
+
+        <div class="text-center mt-9 hidden lg:block">
+            <p class="font-cs-gelios text-9xl text-[#FFFFFF]/20">Lets Manage Tournament</p>
+        </div>
+
+    </footer>
+
+<input type="checkbox" id="add_tournament" class="modal-toggle" {% if messages %}checked{% endif %} />
+<div class="modal backdrop-blur-sm" role="dialog">
+  <div class="modal-box w-11/12 max-w-md bg-white/10 text-white rounded-2xl border border-white/20 shadow-2xl relative p-6 sm:p-8">
+
+    <!-- Close icon -->
+    <label for="add_tournament" class="absolute top-4 right-4 text-gray-300 hover:text-white cursor-pointer text-2xl">✕</label>
+
+    <!-- Title -->
+    <h2 class="text-2xl font-semibold mb-6 text-center tracking-wide">View Tournament by Code</h2>
+
+    <!-- Form -->
+    <form action="{% url 'view_tournament_by_code' %}" method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- Error Messages -->
+      {% if messages %}
+        {% for message in messages %}
+          <p class="text-red-500 text-sm font-medium mb-2 text-center">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <!-- Input -->
+      <div>
+        <label for="tournament_code" class="block mb-2 text-sm font-medium text-white/80 text-center">Tournament Code</label>
+        <input
+          type="text"
+          id="tournament_code"
+          name="tournament_code"
+          placeholder="Type Tournament Code.."
+          class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg text-center"
+          required
+        >
+      </div>
+
+      <!-- Centered Go Button -->
+      <div class="flex justify-center mt-8">
+        <button
+          type="submit"
+          class="btn bg-[#13898B] hover:bg-[#0f6c6d] text-white rounded-3xl px-10 border-none transition duration-200"
+        >
+          Go
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <label class="modal-backdrop" for="add_tournament">Close</label>
+</div>
+
+
+
+</body>
+
+
+</html>

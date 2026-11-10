@@ -1,0 +1,427 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ tournament.name }} | Matches</title>
+
+<!-- Tailwind + DaisyUI -->
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-[#001717]">
+
+<!-- Navbar -->
+<header>
+  <div class="navbar shadow-sm px-4 py-4 lg:px-8 lg:py-6 flex justify-between items-center">
+    <a class="btn btn-ghost text-2xl lg:text-3xl text-white font-cs-gelios">Tournua</a>
+    <div class="hidden lg:flex gap-8 text-white font-medium">
+      <a href="{% url 'dashboard' %}">Home</a>
+      <a href="#">Tournament</a>
+      <a href="#">About us</a>
+    </div>
+    <a href="{% url 'logout' %}" class="relative inline-flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 text-white bg-black rounded-full">
+      <span class="absolute inset-0 rounded-full p-[2px] bg-gradient-to-r from-[#13898B] via-[#14D5D4] via-[#0C6083] to-[#118285]"></span>
+      <span class="relative z-10 flex items-center justify-center w-full h-full rounded-full">
+        <i class="bi bi-box-arrow-right text-lg"></i>
+      </span>
+    </a>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="flex flex-col items-center px-4 py-10 gap-10 lg:px-20">
+
+  <!-- Tournament Info -->
+  <div class="mx-auto h-auto w-10/12  bg-cover bg-center">
+
+    <!-- Tournament Header -->
+    <div class="flex justify-between items-center">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+        {% if tournament.trophy %}
+          <img src="{% static 'trophies/'|add:tournament.trophy %}" alt="Trophy" class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain mx-auto sm:mx-0 lg:scale-120">
+        {% else %}
+          <img src="{% static 'trophies/Trophy1.png' %}" alt="Trophy" class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain mx-auto sm:mx-0 lg:scale-120">
+        {% endif %}
+        <div class="text-white text-center sm:text-left space-y-2">
+          <p class="text-3xl sm:text-4xl lg:text-5xl font-semibold">{{ tournament.name }}</p>
+          <p class="text-lg sm:text-xl text-white/80">{{ tournament.description }}</p>
+          <p class="text-lg sm:text-xl text-white/80"><b>Tournament Code:</b> {{ tournament.code }}</p>
+        </div>
+      </div>
+
+      {% if is_creator %}
+        <!-- Delete Button -->
+        <div class="flex flex-col gap-3">
+          <label for="delete_tournament_modal" id="delete_tournament" class="btn bg-red-600 hover:bg-red-700 text-white rounded-lg px-4 py-2 flex items-center gap-2 cursor-pointer">
+          <i class="bi bi-trash3"></i> Delete Tournament
+          </label>
+          {% if teams_count >= tournament.teams_per_group %}
+            <button class="btn bg-gray-600 text-white cursor-not-allowed" disabled>
+              Add Teams (Max Reached)
+            </button>
+          {% else %}
+            <label for="add_teams_modal" id="add_teams" class="btn bg-[#13898B] text-white cursor-pointer">
+              Add Teams
+            </label>
+          {% endif %}
+        </div>
+      {% endif %}
+      {% if user in tournament.participants.all %}
+        <label for="remove_participant_modal" id="remove_tournament" class="btn bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg px-4 py-2 flex items-center gap-2 cursor-pointer">
+          <i class="bi bi-person-dash"></i> Remove Me
+        </label>
+      {% endif %}
+
+    </div>
+
+    <!-- Toggle Buttons -->
+    <div class="w-full flex rounded-3xl border-2 border-[#13898B] overflow-hidden text-white bg-black/70 backdrop-blur-md mt-6">
+      <button id="fixture" class="w-1/2 py-2.5 font-medium text-center transition-all duration-200 hover:bg-[#13898B]/30 focus:bg-[#13898B] focus:text-white">
+        Matches
+      </button>
+      <a href="{% url 'leaderboard' tournament.id %}" id="tournament-leaderboard" class="w-1/2 py-2.5 font-medium text-center transition-all duration-200 hover:bg-[#13898B]/30 focus:bg-[#13898B] focus:text-white">
+        Leaderboard
+      </a>
+    </div>
+
+    <!-- Match Cards -->
+    <!-- Search Bar -->
+      <div class="w-full sm:w-1/3 mx-auto mt-6">
+        <form method="get" action="" class="flex items-center gap-3">
+          <input
+          type="text"
+          name="q"
+          placeholder="Search team name..."
+          value="{{ query|default:'' }}"
+          class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg"
+          oninput="if(this.value === '') this.form.submit()" />
+          <button type="submit" id="team_search"
+                  class="btn bg-[#13898B] hover:bg-[#0f6c6d] text-white border-none rounded-lg px-6">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+      </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 min-h-[400px] bg-[#001717] w-full rounded-2xl p-4">
+      {% if matches %}
+        {% for match in matches %}
+
+
+        <div id="match-{{ forloop.counter}}" class="match bg-white/5 backdrop-blur-md  rounded-2xl border border-white/20 p-4 sm:p-6 hover:scale-[1.02] hover:bg-white/20 transition duration-300 shadow-lg hover:border-[#13898B]">
+
+          <!-- Match Header -->
+          <p class="text-white text-center text-lg font-semibold mb-5">
+            Match {{ match.display_number }}
+          </p>
+
+          <!-- Teams + Scores -->
+          <div class="flex flex-row items-center justify-between gap-6 w-full">
+
+            <!-- Team 1 -->
+            <div class="flex flex-col items-center justify-center space-y-2">
+              <img src="{% static match.team1.logo %}" alt="Team 1 Logo" class="w-16 h-16 sm:w-20 sm:h-20">
+              <div class="flex items-center justify-center">
+                {% if match.played %}
+                  {% if match.team1_score > match.team2_score %}
+                    <i class="bi bi-dot text-green-400 text-3xl"></i>
+                  {% elif match.team1_score < match.team2_score %}
+                    <i class="bi bi-dot text-red-500 text-3xl"></i>
+                  {% else %}
+                    <i class="bi bi-dot text-yellow-400 text-3xl"></i>
+                  {% endif %}
+                {% endif %}
+                <p class="text-lg sm:text-xl text-white font-semibold text-center">{{ match.team1.name }}</p>
+              </div>
+            </div>
+
+            <!-- Scores + VS -->
+            <div class="flex flex-col items-center gap-2 text-white">
+              {% if match.played %}
+                <p class="text-sm text-green-400 font-medium uppercase tracking-wide">Played</p>
+              {% elif match.match_date %}
+                <p class="text-sm text-yellow-300 font-medium">{{ match.match_date|date:"M d, Y h:i A" }}</p>
+              {% else %}
+                <p class="text-sm text-gray-400 font-medium">Not Scheduled Yet</p>
+              {% endif %}
+
+              <div class="flex items-center gap-4 text-3xl sm:text-4xl font-bold">
+                <span>{{ match.team1_score|default_if_none:"-" }}</span>
+                <span class="text-[#13C4C6] text-2xl sm:text-3xl">VS</span>
+                <span>{{ match.team2_score|default_if_none:"-" }}</span>
+              </div>
+            </div>
+
+            <!-- Team 2 -->
+            <div class="flex flex-col items-center justify-center space-y-2">
+              <img src="{% static match.team2.logo %}" alt="Team 1 Logo" class="w-16 h-16 sm:w-20 sm:h-20">
+              <div class="flex items-center justify-center">
+                <p class="text-lg sm:text-xl text-white font-semibold text-center">{{ match.team2.name }}</p>
+                {% if match.played %}
+                  {% if match.team2_score > match.team1_score %}
+                    <i class="bi bi-dot text-green-400 text-3xl"></i>
+                  {% elif match.team2_score < match.team1_score %}
+                    <i class="bi bi-dot text-red-500 text-3xl"></i>
+                  {% else %}
+                    <i class="bi bi-dot text-yellow-400 text-3xl"></i>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+
+          </div>
+
+          <hr class="my-4 border-white/20">
+
+          <!-- Update Buttons for Creator Only -->
+          {% if is_creator %}
+          <div class="flex justify-center gap-4">
+            {% if not match.match_date %}
+            <label for="date_modal"
+              class="date-btn btn bg-[#0f6c6d] hover:bg-[#13898B] text-white rounded-3xl px-6 py-2 border-none shadow-md transition duration-200"
+              onclick="openDateModal('{{ match.id }}')">
+              Set Date
+            </label>
+            {% endif %}
+
+            {% if match.match_date and not match.played %}
+            <label for="verify_modal"
+              class="btn update_score bg-[#13898B] hover:bg-[#0f6c6d] text-white rounded-3xl px-6 py-2 border-none shadow-md transition duration-200"
+              onclick="openModal('{{ match.id }}', '{{ match.team1.name }}', '{{ match.team2.name }}', '{{ match.team1_score }}', '{{ match.team2_score }}')">
+              Update Score
+            </label>
+            {% endif %}
+          </div>
+          {% endif %}
+
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-white/70 text-center col-span-full mt-20 text-lg">No matches added yet.</p>
+      {% endif %}
+    </div>
+
+  </div>
+</main>
+
+<!-- Score Modal -->
+<input type="checkbox" id="verify_modal" class="modal-toggle" />
+<div class="modal backdrop-blur-sm" role="dialog">
+  <div class="modal-box max-w-2xl w-11/12 bg-white/10 text-white rounded-2xl border border-white/20 shadow-2xl relative p-6 sm:p-8">
+    <label for="verify_modal" class="absolute top-4 right-4 text-gray-300 hover:text-white cursor-pointer text-2xl">✕</label>
+
+    <h2 class="text-2xl font-semibold mb-6 text-center tracking-wide">Enter Match Scores</h2>
+
+    <form action="{% url 'update_match_score' %}" method="post" class="space-y-5">
+      {% csrf_token %}
+      <input type="hidden" id="modal_match_id" name="match_id">
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label id="team1_label" for="team1_score" class="block mb-2 text-sm font-medium">Team 1 Score</label>
+          <input type="text" id="team1_score" name="team1_score"
+                 class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg">
+        </div>
+
+        <div>
+          <label id="team2_label" for="team2_score" class="block mb-2 text-sm font-medium">Team 2 Score</label>
+          <input type="text" id="team2_score" name="team2_score"
+                 class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg">
+        </div>
+      </div>
+
+      <hr class="my-4 border-white/20">
+
+      <div class="flex justify-end gap-3 mt-6">
+        <label for="verify_modal" class="btn bg-gray-600/40 hover:bg-gray-500 text-white rounded-3xl px-6 border-none transition">
+          Cancel
+        </label>
+        <button type="submit" id="submit_score_btn" class="btn bg-[#13898B] hover:bg-[#0f6c6d] text-white rounded-3xl px-8 border-none transition">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+  <label class="modal-backdrop" for="verify_modal">Close</label>
+</div>
+
+<!-- Date Modal -->
+<input type="checkbox" id="date_modal" class="modal-toggle" />
+<div class="modal backdrop-blur-sm" role="dialog">
+  <div class="modal-box max-w-2xl w-11/12 bg-white/10 text-white rounded-2xl border border-white/20 shadow-2xl relative p-6 sm:p-8">
+    <label for="date_modal" class="absolute top-4 right-4 text-gray-300 hover:text-white cursor-pointer text-2xl">✕</label>
+
+    <h2 class="text-2xl font-semibold mb-6 text-center tracking-wide">Set Match Date & Time</h2>
+
+    <form action="{% url 'update_match_date' %}" method="post" class="space-y-5">
+      {% csrf_token %}
+      <input type="hidden" id="modal_date_match_id" name="match_id">
+
+      <div>
+        <label for="match_date" class="block mb-2 text-sm font-medium">Select Date & Time</label>
+        <input type="datetime-local" id="match_date" name="match_date"
+               class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg">
+      </div>
+
+      <hr class="my-4 border-white/20">
+
+      <div class="flex justify-end gap-3 mt-6">
+        <label for="date_modal" class="btn bg-gray-600/40 hover:bg-gray-500 text-white rounded-3xl px-6 border-none transition">
+          Cancel
+        </label>
+        <button type="submit" class="date-save-btn btn bg-[#13898B] hover:bg-[#0f6c6d] text-white rounded-3xl px-8 border-none transition">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+  <label class="modal-backdrop" for="date_modal">Close</label>
+</div>
+
+
+<input type="checkbox" id="delete_tournament_modal" class="modal-toggle" />
+  <div class="modal backdrop-blur-sm">
+    <div class="modal-box bg-white/5 text-white border border-white/20 rounded-2xl shadow-2xl p-6 sm:p-8">
+      <h3 class="font-bold text-lg mb-4">Confirm Deletion</h3>
+      <p class="mb-6">Are you sure you want to delete the tournament <span class="font-semibold">{{ tournament.name }}</span>? This action cannot be undone.</p>
+
+      <div class="flex justify-end gap-4">
+        <!-- Cancel -->
+        <label for="delete_tournament_modal" class="btn bg-gray-600 hover:bg-gray-700 text-white rounded-lg">Cancel</label>
+
+        <!-- Confirm Delete -->
+        <form action="{% url 'delete_tournament' tournament.id %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" id="delete_confirmation" class="btn bg-red-600 hover:bg-red-700 text-white rounded-lg">Yes, Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<input type="checkbox" id="remove_participant_modal" class="modal-toggle" />
+  <div class="modal backdrop-blur-sm">
+    <div class="modal-box bg-white/5 text-white border border-white/20 rounded-2xl shadow-2xl p-6 sm:p-8">
+      <h3 class="font-bold text-lg mb-4">Confirm Removal</h3>
+      <p class="mb-6">Are you sure you want to remove yourself from the tournament <span class="font-semibold">{{ tournament.name }}</span>?</p>
+
+      <div class="flex justify-end gap-4">
+        <!-- Cancel -->
+        <label for="remove_participant_modal" class="btn bg-gray-600 hover:bg-gray-700 text-white rounded-lg">Cancel</label>
+
+        <!-- Confirm Remove -->
+        <form action="{% url 'remove_participant' tournament.id %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" id="remove_confirmation" class="btn bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg">Yes, Remove</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<input type="checkbox" id="add_teams_modal" class="modal-toggle" />
+<div class="modal backdrop-blur-sm">
+  <div class="modal-box max-w-3xl w-11/12 bg-white/10 text-white rounded-2xl border border-white/20 shadow-2xl relative p-6 sm:p-8">
+
+    <!-- Close Button -->
+    <label for="add_teams_modal" class="absolute top-4 right-4 text-gray-300 hover:text-white cursor-pointer text-2xl">✕</label>
+
+    <!-- Title -->
+    <h2 class="text-2xl font-semibold mb-6 text-center">Add Teams</h2>
+
+    <!-- Form -->
+    <form action="{% url 'add_teams' tournament.id %}" method="post" id="add_teams_form" class="space-y-5">
+      {% csrf_token %}
+      <div id="team_fields_container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+
+      <!-- Buttons -->
+      <div class="flex justify-end gap-3 mt-6">
+        <label for="add_teams_modal" class="btn bg-gray-600/40 hover:bg-gray-500 text-white rounded-3xl px-6 border-none transition">
+          Cancel
+        </label>
+        <button type="submit" id="team_submit" class="btn bg-[#13898B] hover:bg-[#0f6c6d] text-white rounded-3xl px-8 border-none transition">
+          Save Teams
+        </button>
+      </div>
+    </form>
+  </div>
+  <label class="modal-backdrop" for="add_teams_modal">Close</label>
+</div>
+
+
+
+<!-- JS -->
+<script>
+function openModal(matchId, team1, team2, team1Score, team2Score) {
+  document.getElementById("modal_match_id").value = matchId;
+  document.getElementById("team1_label").innerText = `${team1} Score`;
+  document.getElementById("team2_label").innerText = `${team2} Score`;
+  document.getElementById("team1_score").placeholder = `Enter ${team1} Score`;
+  document.getElementById("team2_score").placeholder = `Enter ${team2} Score`;
+  document.getElementById("team1_score").value = team1Score || "";
+  document.getElementById("team2_score").value = team2Score || "";
+}
+
+function openDateModal(matchId) {
+  document.getElementById("modal_date_match_id").value = matchId;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("team_fields_container");
+  const totalTeams = {{ tournament.teams_per_group }}; // value from DB
+
+  // Dynamically create team input fields
+  for (let i = 1; i <= totalTeams; i++) {
+    const teamField = document.createElement("div");
+    teamField.className = "bg-white/10 border border-white/20 rounded-2xl p-4 transition hover:bg-white/20";
+
+    teamField.innerHTML = `
+      <label class="block text-white mb-2 font-medium">Team ${i} Name</label>
+      <input type="text" name="team${i}" placeholder="Enter team name"
+        class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#13C4C6]" required>
+      <p class="text-red-500 text-sm mt-1 hidden">Duplicate name!</p>
+    `;
+    container.appendChild(teamField);
+  }
+
+  // Form validation before submit
+  const form = document.getElementById("add_teams_form");
+  form.addEventListener("submit", (e) => {
+    const inputs = container.querySelectorAll("input[type='text']");
+    const names = [];
+    let valid = true;
+
+    inputs.forEach((input) => {
+      const value = input.value.trim();
+      const errorMsg = input.nextElementSibling;
+
+      // Reset styles
+      input.classList.remove("border-red-500");
+      errorMsg.classList.add("hidden");
+
+      if (!value) valid = false; // empty field
+
+      if (names.includes(value.toLowerCase())) {
+        valid = false;
+        input.classList.add("border-red-500");
+        errorMsg.classList.remove("hidden");
+      }
+
+      names.push(value.toLowerCase());
+    });
+
+    if (!valid) {
+      e.preventDefault();
+      alert("Please fill all team names and make sure each name is unique!");
+    }
+  });
+});
+</script>
+
+</body>
+</html>

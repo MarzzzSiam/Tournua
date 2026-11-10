@@ -1,0 +1,558 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-[#001717]">
+    <!-- Header -->
+    <header>
+        <div class="navbar shadow-sm px-2 py-6 lg:p-6">
+            <div class="navbar-start">
+                <div class="dropdown">
+                    <div tabindex="0" role="button" class="btn btn-ghost lg:hidden text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                        </svg>
+                    </div>
+                    <ul tabindex="0"
+                        class="menu menu-sm dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow text-white bg-[#001717]">
+                        <li><a href="">Home</a></li>
+                        <li><a href="">Tournament</a></li>
+                        <li><a href="">About us</a></li>
+                    </ul>
+                </div>
+                <a class="btn btn-ghost text-[28px] text-[#FFFFFF] font-cs-gelios">Tournua</a>
+            </div>
+
+            <div class="navbar-center hidden lg:flex">
+                <ul class="menu menu-horizontal px-1 text-white">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Tournament</a></li>
+                    <li><a href="">About us</a></li>
+                </ul>
+            </div>
+
+            <div class="navbar-end flex gap-4">
+                <div class="bg-[#000000] text-white rounded-3xl lg:px-3 py-2 px-2 border-[#13898B] border-2 text-center">
+                    👋 Welcome, {{name}}
+                </div>
+                <a href="{% url 'logout' %}" id="logout" class="btn relative inline-flex items-center justify-center w-12 h-12 text-white bg-black rounded-full">
+                    <span class="absolute inset-0 rounded-full p-[2px] bg-gradient-to-r from-[#13898B] via-[#14D5D4] via-[#0C6083] to-[#118285]"></span>
+                    <span class="relative z-10 flex items-center justify-center w-full h-full rounded-full"><i class="bi bi-box-arrow-right text-lg"></i></span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main>
+        <!-- Hero Section -->
+        <section class="flex items-center justify-center gap-4 ">
+            <div class="mx-left h-[400px] w-[110px] bg-cover mb-80 hidden lg:block" style="background-image: url('{% static 'images/bgLishtRight.png' %}');">
+                <img src="{% static 'images/bird.png' %}" alt="" class="h-100 w-100">
+            </div>
+
+            <div class="mx-auto h-auto lg:h-[900px] lg:w-[1100px] bg-cover bg-center"
+                style="background-image: url('{% static 'images/trophy1.png' %}');">
+
+                <div class="flex flex-col items-center justify-center h-full text-center font-poppins mt-30 lg:mt-0">
+                    <h1 class="text-4xl lg:text-6xl font-cs-gelios text-[#13898B]">Generate, Manage and Track Tournaments<br> </h1>
+                    <h1 class="text-3xl font-cs-gelios text-white mt-4">All in One Place</h1>
+                    <p class="text-lg text-white mb-12 mt-3">No more messy arrangements! <br>
+                        Whether it’s friends, clubs, or communities, Tournuá makes every<br> match exciting with easy score tracking and live standings."</p>
+
+                    <div class="flex flex-col lg:flex-row gap-6 lg:gap-14 mb-20">
+                        <button class="btn bg-[#000000] text-white rounded-3xl px-6 border-[#13898B] border-2">
+                            <label for="verify_modal" class="text-[#00bfa5] cursor-pointer">Create A New Tournament</label>
+                        </button>
+                        <label for="add_tournament2" class="btn bg-[#000000] text-white rounded-3xl px-6 border cursor-pointer" id="tournament_add">
+                            Follow A Public Tournament
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mx-left h-[400px] w-[100px] bg-cover mb-80 hidden lg:block" style="background-image: url('{% static 'images/bgLight.png' %}');">
+                <img src="{% static 'images/birdsRight.png' %}" alt="" class="h-100 w-200">
+            </div>
+        </section>
+
+        <!-- Tournament Section -->
+        <section class="mb-20">
+            <div class="lg:w-8/12 lg:mx-auto h-auto mx-5 grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                <h1 class="col-span-full text-3xl sm:text-4xl font-cs-gelios text-white mb-8 text-center lg:text-left">
+                    Tournament
+                </h1>
+
+                <!-- Add Tournament Card -->
+                <div class="w-full flex flex-col gap-4 items-center justify-center
+                    rounded-xl border-2 border-white/30
+                    bg-white/5 backdrop-blur-md shadow-xl p-6 sm:p-10 text-center">
+
+                    <!-- Button to open modal -->
+                    <label
+                        for="add_tournament"
+                        id="add_tournament_btn"
+                        class="btn border-2 border-[#13898B] text-white rounded-full w-14 h-14 bg-white/5 flex items-center justify-center transition duration-200 hover:border-[#13C4C6] hover:bg-white/10">
+                        <i class="bi bi-plus-lg text-2xl text-gray-400"></i>
+                    </label>
+
+                    <p class="text-2xl text-white font-medium">Add your Tournament</p>
+                </div>
+
+                <!-- Existing Tournaments -->
+                {% for i in tournaments %}
+                    <div class="tournament-card w-full max-w-lg mx-auto lg:max-w-md bg-white/5 backdrop-blur-md rounded-xl border border-white/20 shadow-xl p-6 lg:p-8 flex flex-col gap-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0">
+                            <p class="text-white text-lg sm:text-xl lg:text-2xl font-semibold">
+                                {{i.name}}
+                            </p>
+                            {% if i.trophy %}
+                                <img src="{% static 'trophies/'|add:i.trophy %}" alt="Trophy" class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain mx-auto sm:mx-0 lg:scale-120">
+                            {% else %}
+                                <img src="{% static 'trophies/Trophy1.png' %}" alt="Trophy" class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain mx-auto sm:mx-0 lg:scale-120">
+                            {% endif %}
+                        </div>
+
+                        <p class="text-white/80 text-sm sm:text-base">
+                            {{i.created_at}}
+                        </p>
+                        <p class="text-sm text-white/70">
+                            {% if user.id == i.user.id %}
+                                Admin
+                            {% else %}
+                                Created by {{ i.user.full_name }}
+                            {% endif %}
+                        </p>
+
+                        <a href="{% url 'viewTournament' i.id %}" class="inline-flex items-center text-white/90 hover:text-white font-medium text-sm sm:text-base transition-all">
+                            <i class="bi bi-arrow-up-right-circle mr-2 text-lg"></i> View
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="lg:w-8/12 mx-auto h-auto mb-25">
+            <div class="mx-5 lg:mx-0 text-center lg:text-left">
+                <h1 class="text-4xl font-cs-gelios text-white mb-5">About Us</h1>
+                <p class="text-xl text-white font-poppins">At Tournua, we believe tournaments should be seamless, fair, and fun. Whether it’s traditional sports or eSports, organizing and tracking competitions shouldn’t be a hassle.<br>
+                That’s why we built Tournua – From Registration to Victory, Seamlessly. Our platform helps organizers create tournaments, manage teams, generate fixtures, update scores in real time, and keep participants informed every step of the way.</p>
+            </div>
+            <!-- Feature Cards -->
+            <div class="h-auto rounded-3xl border-2 border-white/30 bg-white/5 backdrop-blur-md shadow-xl grid lg:grid-cols-3 gap-4 mt-10 p-6 mx-5 lg:mx-0">
+                <div class="border-b-1 lg:border-b-0 border-b-white lg:border-r-1 border-r-white class flex flex-col justify-center items-center gap-5 px-2 py-6">
+
+                    <div class="h-24 w-24 bg-white/6 backdrop-blur-md shadow-xl rounded-lg flex items-center justify-center mb-2">
+                        <p class="text-white text-6xl"><i class="bi bi-rocket-takeoff"></i></p>
+                    </div>
+                    <p class="text-white text-2xl mb-2">Simplify Management</p>
+                    <p class="text-white text-[18px] text-center font-poppins">Easily create, organize, and manage tournaments without manual work.</p>
+
+                </div>
+
+                <div class="border-b-1 lg:border-b-0 border-b-white lg:border-r-1 border-r-white class flex flex-col justify-center items-center gap-5 px-2 py-6">
+
+                    <div class="h-24 w-24 bg-white/6 backdrop-blur-md shadow-xl rounded-lg flex items-center justify-center mb-2">
+                        <img src="{% static 'images/1.png' %}" alt="" class="h-22 w-22">
+                    </div>
+                    <p class="text-white text-center text-2xl mb-2">Automatic Fixtures & Tracking</p>
+                    <p class="text-white text-[18px] text-center font-poppins">Generate match schedules instantly and track progress with ease.</p>
+
+                </div>
+
+                <div class="flex flex-col justify-center items-center gap-5 px-2 py-6">
+
+                    <div class="h-24 w-24 bg-white/6 backdrop-blur-md shadow-xl rounded-lg flex items-center justify-center mb-2">
+                        <img src="{% static 'images/2.png' %}" alt="" class="h-22 w-22">
+                    </div>
+                    <p class="text-white text-2xl mb-2">Smooth Experience</p>
+                    <p class="text-white text-[18px] text-center font-poppins">Provide organizers and participants a clear, engaging and user-friendly journey.</p>
+
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full h-auto lg:h-90 overflow-hidden bg-white/6 backdrop-blur-md rounded-t-3xl lg:px-20 lg:pt-10 ">
+        <div class="flex flex-col lg:flex-row justify-start lg:justify-between lg:items-center p-6 font-poppins">
+            <div class="text-white flex flex-col items-start lg:justify-center lg:items-center gap-4 mb-8 lg:mb-0  lg:hidden">
+                <h1 class="text-2xl lg:text-3xl font-bold">Got a Tournament? Want to collaborate? </h1>
+                <button class="bg-gradient-to-r from-[#14D5D4] to-[#0C6083] text-white text-xl rounded-xl py-1 px-4">Subscribe  <i class="bi bi-play-fill"></i></button>
+            </div>
+
+            <div class="text-white mb-8 lg:mb-0">
+                <p class="text-[18px] mb-4">Contact</p>
+                <p class="text-xl font-semibold mb-2">tournua@gmail.com</p>
+                <p class="text-xl font-semibold">+880 1976 295575</p>
+            </div>
+
+            <div class="text-white hidden lg:flex lg:flex-col lg:justify-between lg:items-center gap-4">
+                <h1 class="text-2xl lg:text-3xl font-bold">Got a Tournament? Want to collaborate? </h1>
+                <button class="bg-gradient-to-r from-[#14D5D4] to-[#0C6083] text-white text-xl rounded-xl py-1 px-4">Subscribe  <i class="bi bi-play-fill"></i></button>
+            </div>
+
+            <div class="text-white">
+                <p class="text-[18px] mb-4">Bangladesh</p>
+                <p class="text-xl font-semibold mb-1">74/A, Green Road,</p>
+                <p class="text-xl font-semibold">Dhaka-1205, Bangladesh</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-2 lg:gap-0 justify-between items-center pt-4 text-white">
+            <p>© Copyright 2025. Team Tournuá. All rights reserved.</p>
+            <a href="" class="lg:mr-80">Terms & Conditions</a>
+
+            <div class="flex gap-4">
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-linkedin"></i></a>
+            </div>
+        </div>
+
+        <div class="text-center mt-9 hidden lg:block">
+            <p class="font-cs-gelios text-9xl text-[#FFFFFF]/20">Lets Manage Tournament</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+
+    <!-- Create Tournament Modal -->
+<input type="checkbox" id="verify_modal" class="modal-toggle" />
+<div class="modal backdrop-blur-md" role="dialog">
+  <div class="modal-box max-w-4xl w-11/12 bg-white/5 text-white rounded-2xl border border-white/20 shadow-2xl relative p-8">
+
+    <!-- Close Button -->
+    <label for="verify_modal" class="absolute top-4 right-4 text-gray-300 hover:text-white cursor-pointer text-2xl">✕</label>
+
+    <!-- Modal Title -->
+    <h2 class="text-2xl font-bold mb-6 text-center">Create Tournament</h2>
+
+    <!-- Form -->
+    <form id="create_tournament_form" action="{% url 'create_tournament' %}" method="post" enctype="multipart/form-data" class="space-y-5">
+      {% csrf_token %}
+
+      <!-- Page 1 -->
+      <div id="page1" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Tournament Name</label>
+          <input id="tournament_name" name="tournament_name" type="text"
+            placeholder="Type tournament name..."
+            class="input input-bordered w-full bg-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#14D5D4]" required>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-2">Tournament Moto</label>
+          <textarea id="tournament_descriptions" name="tournament_descriptions" rows="3"
+            placeholder="Add tournament moto..."
+            class="textarea textarea-bordered w-full bg-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#14D5D4]" required></textarea>
+        </div>
+
+        <!-- Trophy Selection -->
+        <div>
+          <label class="block text-sm font-medium mb-3">Select Tournament Trophy:</label>
+          <div class="flex flex-wrap gap-6">
+            {% for i in "1234" %}
+            <label class="cursor-pointer flex flex-col items-center trophy-option">
+              <input type="radio" name="trophy" value="Trophy{{ i }}.png" class="hidden trophy-radio" required>
+              <img src="{% static 'trophies/Trophy'|add:i|add:'.png' %}"
+                class="w-20 h-20 border-2 border-transparent rounded-lg hover:border-[#14D5D4] trophy-img" />
+              <span class="text-white mt-1">Trophy {{ i }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+          <div>
+            <label class="block text-sm font-medium mb-2">Tournament Type</label>
+            <select name="select_type" id="select_type"
+              class="select select-bordered w-full bg-white/40 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#14D5D4]" required>
+              <option value="">Select</option>
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-2">Player Type</label>
+            <select name="player_type" id="player_type"
+              class="select select-bordered w-full bg-white/40 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#14D5D4]" required>
+              <option value="">Select</option>
+              <option value="single">Single</option>
+              <option value="team">Team</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex justify-center items-center gap-4 pt-4">
+          <button type="button" id="next1"
+            class="btn bg-black text-white rounded-3xl px-8 border-[#13898B] border-2 hover:bg-[#0C6083]">
+            Next
+          </button>
+          <label for="verify_modal"
+            class="btn bg-gradient-to-r from-[#13898B] via-[#14D5D4] to-[#118285] text-white rounded-3xl px-8 border-0">
+            Cancel
+          </label>
+        </div>
+      </div>
+
+      <!-- Page 2 -->
+      <div id="page2" class="hidden space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-3">Select a Format</label>
+          <div class="flex gap-6">
+            <label class="flex items-center gap-2">
+              <input type="radio" id="League" name="format" value="League" class="radio radio-info" required>
+              League
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-2">No. of Teams</label>
+          <select name="team_num" id="team_num"
+            class="select select-bordered w-1/3 bg-white/40 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#14D5D4]" required>
+            <option value="">Select</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+          </select>
+        </div>
+
+        <div class="flex justify-center items-center gap-4 pt-6">
+          <button type="button" id="back1"
+            class="btn bg-gray-600 text-white rounded-3xl px-8 hover:bg-gray-500">
+            Back
+          </button>
+          <button type="submit" id="next2"
+            class="btn bg-black text-white rounded-3xl px-8 border-[#13898B] border-2 hover:bg-[#0C6083]">
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <label class="modal-backdrop" for="verify_modal">Close</label>
+</div>
+
+    <!-- Add Tournament Modal -->
+<input type="checkbox" id="add_tournament" class="modal-toggle" {% if error %}checked{% endif %} />
+<div class="modal backdrop-blur-sm" role="dialog">
+  <div class="modal-box w-11/12 max-w-md bg-white/10 text-white rounded-2xl border border-white/20 shadow-2xl relative p-6 sm:p-8">
+
+    <!-- Close icon -->
+    <label for="add_tournament" class="absolute top-4 right-4 text-gray-300 hover:text-white cursor-pointer text-2xl">✕</label>
+
+    <!-- Title -->
+    <h2 class="text-2xl font-semibold mb-6 text-center tracking-wide">Add Tournament</h2>
+
+    <!-- Form -->
+    <form action="{% url 'join_tournament' %}" method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- Error Messages -->
+      {% if error %}
+        <p class="text-red-500 text-sm font-medium mb-2 text-center">{{ error }}</p>
+      {% endif %}
+
+      <!-- Input -->
+      <div>
+        <label for="tournament_code" class="block mb-2 text-sm font-medium text-white/80 text-center">Tournament Code</label>
+        <input
+          type="text"
+          id="tournament_code"
+          name="tournament_code"
+          placeholder="Type Tournament Code.."
+          class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg text-center"
+          required
+        >
+      </div>
+
+      <!-- Centered Add Button -->
+      <div class="flex justify-center mt-6 gap-3">
+
+        <button
+          type="submit"
+          id="add_new_tournament"
+          class="btn bg-[#13898B] hover:bg-[#0f6c6d] text-white rounded-3xl px-10 border-none transition duration-200"
+        >
+          Add
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <label class="modal-backdrop2" for="add_tournament">Close</label>
+</div>
+
+
+ <input type="checkbox" id="add_tournament2" class="modal-toggle" {% if messages %}checked{% endif %} />
+<div class="modal backdrop-blur-sm" role="dialog">
+  <div class="modal-box w-11/12 max-w-md bg-white/10 text-white rounded-2xl border border-white/20 shadow-2xl relative p-6 sm:p-8">
+
+    <!-- Close icon -->
+    <label for="add_tournament2" class="absolute top-4 right-4 text-gray-300 hover:text-white cursor-pointer text-2xl">✕</label>
+
+    <!-- Title -->
+    <h2 class="text-2xl font-semibold mb-6 text-center tracking-wide">View Tournament by Code</h2>
+
+    <!-- Form -->
+    <form action="{% url 'view_tournament_by_code' %}" method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- Error Messages -->
+      {% if messages %}
+        {% for message in messages %}
+          <p class="text-red-500 text-sm font-medium mb-2 text-center">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <!-- Input -->
+      <div>
+        <label for="tournament_code2" class="block mb-2 text-sm font-medium text-white/80 text-center">Tournament Code</label>
+        <input
+          type="text"
+          id="tournament_code2"
+          name="tournament_code"
+          placeholder="Type Tournament Code.."
+          class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg text-center"
+          required
+        >
+      </div>
+
+      <!-- Centered Go Button -->
+      <div class="flex justify-center mt-8">
+        <button
+          type="submit"
+          id="go_button"
+          class="btn bg-[#13898B] hover:bg-[#0f6c6d] text-white rounded-3xl px-10 border-none transition duration-200"
+        >
+          Go
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <label class="modal-backdrop2" for="add_tournament2">Close</label>
+</div>
+
+{% if show_deleted_modal or show_created_modal or show_remove_modal or show_join_modal %}
+  <!-- Tournament Deleted Modal -->
+  <input type="checkbox" id="tournament_deleted_modal" class="modal-toggle" checked />
+  <div class="modal backdrop-blur-sm">
+    <div class="modal-box bg-white/5 text-white border border-white/20 rounded-2xl shadow-2xl p-6 sm:p-8">
+      <div class="flex flex-col items-center gap-4">
+        <!-- Success Icon -->
+        <div class="flex items-center justify-center">
+            <p class="text-green-600 text-4xl"><i class="bi bi-check-circle-fill "></i></p>
+        </div>
+        {% if show_deleted_modal %}
+          <h3 class="font-bold text-lg">Tournament Deleted Successfully</h3>
+        {% elif show_created_modal %}
+          <h3 class="font-bold text-lg">Tournament Created Successfully</h3>
+          {% elif show_remove_modal %}
+            <h3 class="font-bold text-lg">Tournament Remove Successfully</h3>
+          {% elif show_join_modal %}
+            <h3 class="font-bold text-lg">Tournament Added Successfully</h3>
+        {% endif %}
+
+        <!-- OK Button -->
+        <label for="tournament_deleted_modal" id="confirmation_ok" class="btn bg-green-400 hover:bg-green-700 text-white rounded-lg px-6 py-2 mt-4">
+          OK
+        </label>
+      </div>
+    </div>
+  </div>
+{% endif %}
+<script>
+  // Page Navigation
+  document.addEventListener("DOMContentLoaded", () => {
+  const page1 = document.getElementById("page1");
+  const page2 = document.getElementById("page2");
+  const next1 = document.getElementById("next1");
+  const back1 = document.getElementById("back1");
+  const form = document.getElementById("create_tournament_form");
+
+  // Page switching
+  next1.addEventListener("click", () => {
+    if (validatePage1()) {
+      page1.classList.add("hidden");
+      page2.classList.remove("hidden");
+    }
+  });
+
+  back1.addEventListener("click", () => {
+    page2.classList.add("hidden");
+    page1.classList.remove("hidden");
+  });
+
+  // Form submit validation (Page 2)
+  form.addEventListener("submit", (e) => {
+    if (!validatePage2()) {
+      e.preventDefault();
+      alert("Please fill all fields before submitting!");
+    }
+  });
+
+  function validatePage1() {
+    const name = document.getElementById("tournament_name").value.trim();
+    const desc = document.getElementById("tournament_descriptions").value.trim();
+    const trophy = document.querySelector("input[name='trophy']:checked");
+    const type = document.getElementById("select_type").value;
+    const player = document.getElementById("player_type").value;
+
+    if (!name || !desc || !trophy || !type || !player) {
+      alert("Please fill all fields on Page 1 before proceeding!");
+      return false;
+    }
+    return true;
+  }
+
+  function validatePage2() {
+    const format = document.querySelector("input[name='format']:checked");
+    const teamNum = document.getElementById("team_num").value;
+
+    if (!format || !teamNum) {
+      return false;
+    }
+    return true;
+  }
+});
+
+  // Trophy Selection Highlight
+  const trophyOptions = document.querySelectorAll(".trophy-option");
+  trophyOptions.forEach(option => {
+    option.addEventListener("click", () => {
+      // remove highlight from all
+      trophyOptions.forEach(opt => {
+        opt.querySelector("img").classList.remove("border-[#14D5D4]");
+      });
+      // highlight selected
+      option.querySelector("img").classList.add("border-[#14D5D4]");
+      // check radio input
+      option.querySelector("input").checked = true;
+    });
+  });
+</script>
+
+
+</body>
+</html>

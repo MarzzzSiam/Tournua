@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Sign Up page</title>
+</head>
+<body class="bg-[#001614]">
+
+<section class="flex flex-col lg:flex-row w-full h-screen relative">
+    <!-- Left Side Image -->
+    <div class="w-4/5 h-screen overflow-hidden relative hidden lg:block">
+        <img src="{% static 'images/TrophyBG 2.png' %}" alt=""
+             class="w-full h-full scale-x-130 scale-y-110 object-contain absolute right-20">
+
+        <!-- Overlay Text -->
+        <div class="absolute bottom-20 left-10">
+            <p class="text-white text-3xl lg:text-3xl font-cs-gelios">
+                From Registration To Victory, <br>
+                <span class="text-[#00bfa5] italic text-4xl">Seamlessly!</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Right Side Sign Up Form -->
+    <div class="w-full lg:w-2/5 h-screen flex justify-center items-center absolute lg:right-10 overflow-hidden bottom-10 lg:bottom-0">
+
+        <form id="signupForm" action="{% url 'signup_save' %}" method="POST" class="space-y-5 w-4/5 lg:w-3/5 lg:scale-110">
+            {% csrf_token %}
+
+            <img src="{% static 'images/TournuaLogo.png' %}" alt="">
+            <p class="text-6xl text-white font-cs-gelios">Sign Up</p>
+            <p class="text-white mb-2">Sign up with email address</p>
+            {% if messages %}
+  {% for message in messages %}
+    <div class="bg-green-100 text-green-700 p-2 rounded mb-2">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+            <!-- Full Name -->
+            {% if form.full_name.errors %}
+                <div class="bg-red-100 border border-red-500 text-red-700 px-3 py-1 rounded-lg mb-1 text-[12px]">
+                    {{ form.full_name.errors.0 }}
+                </div>
+            {% endif %}
+            <div class="flex items-center rounded-lg px-3 py-3 w-full bg-[#00302E]">
+                <i class="bi bi-person text-gray-400 mr-2"></i>
+                <input type="text" name="full_name" value="{{ form.full_name.value|default:'' }}"
+                    placeholder="Full Name"
+                    class="bg-transparent outline-none border-0 text-white w-full">
+            </div>
+
+            <!-- Email -->
+            {% if form.email.errors %}
+                <div class="bg-red-100 border border-red-500 text-red-700 px-3 py-1 rounded-lg mb-1 text-[12px]">
+                    {{ form.email.errors.0 }}
+                </div>
+            {% endif %}
+            <div class="flex items-center rounded-lg px-3 py-3 w-full bg-[#00302E]">
+                <i class="bi bi-envelope text-gray-400 mr-2"></i>
+                <input type="email" name="email" value="{{ form.email.value|default:'' }}"
+                    placeholder="yourname@gmail.com"
+                    class="bg-transparent outline-none border-0 text-white w-full">
+            </div>
+
+            <!-- Password -->
+            {% if form.password.errors %}
+                <div class="bg-red-100 border border-red-500 text-red-700 px-3 py-1 rounded-lg mb-1 text-[12px]">
+                    {{ form.password.errors.0 }}
+                </div>
+            {% endif %}
+            <div class="flex items-center rounded-lg px-3 py-3 w-full bg-[#00302E]">
+                <i class="bi bi-lock text-gray-400 mr-2"></i>
+                <input type="password" name="password"
+                    placeholder="Password (Min. 8 characters)"
+                    class="bg-transparent outline-none border-0 text-white w-full">
+            </div>
+
+            <!-- Button -->
+            <button type="submit"
+                class="btn text-white bg-gradient-to-r from-[#033937] to-[#008480] w-full py-3 rounded-full text-xl font-semibold">
+                Sign Up
+            </button>
+
+            <hr class="border-white">
+
+            <div class="flex  lg:mr-10 text-[14px]">
+                <p class="text-white">By signing up you agree to our </p>
+                <label for="verify_modal" class="text-[#00817D] ml-1 cursor-pointer hover:underline">
+                    Terms and Conditions
+                </label>
+            </div>
+        </form>
+
+    </div>
+
+    <!-- Decorative Image -->
+    <div class="absolute bottom-50">
+        <img src="{% static 'images/bgLishtRight.png' %}" alt="">
+    </div>
+</section>
+
+
+<!-- Modal -->
+<input type="checkbox" id="verify_modal" class="modal-toggle" />
+<div class="modal backdrop-blur-sm" role="dialog">
+  <div class="modal-box max-w-3xl w-11/12 bg-white/5 text-white rounded-2xl border border-white/20 shadow-2xl relative p-8">
+      
+      <!-- Close Button -->
+      <label for="verify_modal" class="absolute top-4 right-4 text-gray-300 hover:text-white cursor-pointer text-2xl">✕</label>
+
+      <!-- Logo -->
+      <div class="flex justify-center mb-6">
+        <img src="{% static 'images/TournuaLogo.png' %}" alt="Tournuá Logo" class="h-30 w-30">
+      </div>
+
+      <!-- Title -->
+      <h2 class="text-3xl font-bold text-center text-[#00bfa5] mb-4">Terms & Conditions</h2>
+      <p class="text-gray-200 text-lg text-center mb-5">
+        By using <span class="text-[#00bfa5] font-semibold">Tournuá</span>, you agree to the following:
+      </p>
+
+      <!-- Terms List -->
+      <ol class="list-decimal list-inside space-y-2 text-[16px] text-gray-100 leading-relaxed">
+          <li><b>Eligibility –</b> You must be 13+ to use this platform. Under 18 requires guardian consent.</li>
+          <li><b>Accounts –</b> Provide accurate details and keep your login secure. Fake accounts are not allowed.</li>
+          <li><b>Use of Service –</b> You may create/join tournaments. Don’t misuse the platform (cheating, offensive content, illegal use).</li>
+          <li><b>Content –</b> You own your data (team names, scores, etc.) but grant us permission to display and process it.</li>
+          <li><b>Privacy –</b> Your personal data is protected. We don’t sell it to third parties.</li>
+          <li><b>Disclaimer –</b> Results and scores are user-generated. We are not responsible for errors or disputes.</li>
+          <li><b>Termination –</b> Accounts may be suspended for violating these terms.</li>
+          <li><b>Governing Law –</b> These terms follow the laws of Bangladesh.</li>
+      </ol>
+
+      <!-- Divider -->
+      <hr class="my-4 border-white/20">
+
+      <!-- Footer -->
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-lg">
+          <p class="text-gray-300"><b>📧 Contact:</b> tournua.official@gmail.com</p>
+          <!-- Got It Button -->
+          <label for="verify_modal" class="btn bg-[#000000] text-white rounded-3xl px-6 border-[#13898B] border-2 hover:scale-105 transition cursor-pointer">
+              Got It
+          </label>
+      </div>
+  </div>
+
+  <!-- Close Overlay -->
+  <label class="modal-backdrop" for="verify_modal">Close</label>
+</div>
+
+<input type="checkbox" id="add_tournament" class="modal-toggle" {% if request.session.show_modal %} checked {% endif %} />
+<div class="modal backdrop-blur-sm" role="dialog">
+  <div class="modal-box w-11/12 max-w-md bg-white/10 text-white rounded-2xl border border-white/20 shadow-2xl relative p-6 sm:p-8">
+
+    <!-- Close icon -->
+    <label for="add_tournament" class="absolute top-4 right-4 text-gray-300 hover:text-white cursor-pointer text-2xl">✕</label>
+
+    <!-- Title -->
+    <h2 class="text-2xl font-semibold mb-6 text-center tracking-wide">View Tournament by Code</h2>
+
+    <!-- Form -->
+    <form action="{% url 'verify_code' %}" method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- Error Messages -->
+      {% if messages %}
+        {% for message in messages %}
+          <p class="text-red-500 text-sm font-medium mb-2 text-center">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <!-- Input -->
+      <div>
+        <label for="verification_code" class="block mb-2 text-sm font-medium text-white/80 text-center">Tournament Code</label>
+        <input
+          type="text"
+          id="verification_code"
+          name="verification_code"
+          placeholder="Type verification Code.."
+          class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg text-center"
+          required
+        >
+      </div>
+
+      <!-- Centered Go Button -->
+      <div class="flex justify-center mt-8">
+        <button
+          type="submit"
+          class="btn bg-[#13898B] hover:bg-[#0f6c6d] text-white rounded-3xl px-10 border-none transition duration-200"
+        >
+          Go
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <label class="modal-backdrop" for="add_tournament">Close</label>
+</div>
+
+ 
+
+</body>
+</html>

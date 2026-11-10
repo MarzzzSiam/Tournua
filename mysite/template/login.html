@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Login</title>
+</head>
+<body class="bg-[#001614]">
+
+    <!-- Main Section -->
+    <section class="flex flex-col lg:flex-row w-full h-screen relative">
+        <!-- Left Side Banner -->
+        <div class="w-4/5 h-screen overflow-hidden relative hidden lg:block">
+            <img src="{% static 'images/TrophyBG 2.png' %}" alt="" class="w-full h-full scale-x-130 scale-y-110 object-contain absolute right-20">
+            <div class="absolute bottom-20 left-10">
+                <p class="text-white text-3xl lg:text-3xl font-cs-gelios">
+                    From Registration To Victory, <br>
+                    <span class="text-[#00bfa5] italic text-4xl">Seamlessly!</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="w-full lg:w-2/5 h-screen flex justify-center items-center absolute lg:right-10 overflow-hidden bottom-10 lg:bottom-0">
+            <form action="{% url 'login_view' %}" method="POST" class="space-y-5 w-4/5 lg:w-3/5 lg:scale-120">
+                {% csrf_token %}
+
+                <img src="{% static 'images/TournuaLogo.png' %}" alt="">
+                <p class="text-6xl text-white font-cs-gelios">Log In</p>
+
+                <!-- Show error if login fails -->
+                {% if error %}
+                    <div class="bg-red-100 border border-red-500 text-red-700 px-3 py-1 rounded-lg mb-1 text-[12px]">
+                        {{ error }}
+                    </div>
+                {% endif %}
+
+                <label for="email" class="text-white">Log in with email address</label>
+                <div class="flex items-center rounded-lg px-3 py-3 w-full bg-[#00302E]">
+                    <i class="bi bi-envelope text-gray-400 mr-2"></i>
+                    <input type="email" name="email" placeholder="yourname@gmail.com"
+                        class="bg-transparent outline-none border-0 text-white w-full" required>
+                </div>
+
+                <div class="flex items-center rounded-lg px-3 py-3 w-full bg-[#00302E]">
+                    <i class="bi bi-lock text-gray-400 mr-2"></i>
+                    <input type="password" name="password" placeholder="Password (Min. 8 characters)"
+                        class="bg-transparent outline-none border-0 text-white w-full" required>
+                </div>
+
+                <!-- Create Account + Forgot -->
+                <div class="w-full flex justify-between mt-[-10px] mb-2 text-[14px]">
+                    <div class="flex">
+                        <p class="text-white">Create </p>
+                        <a href="{% url 'signup' %}" class="text-[#00817D] ml-1">New Account</a>
+                    </div>
+                    <div class="flex">
+                        <p class="text-white">Forget Your</p>
+                        <label for="forget_password_modal" class="text-[#00817D] ml-1"> Password?</label>
+                    </div>
+                </div>
+
+                <button type="submit"
+                        class="btn text-white bg-gradient-to-r from-[#033937] to-[#008480] w-full py-3 rounded-full text-xl font-semibold">
+                    Log in
+                </button>
+
+                <hr class="border-white">
+
+                <!-- Terms Link -->
+                <div class="mt-2 text-sm text-gray-300 text-[14px]">
+                    <p>By logging in you agree to our 
+                        <label for="verify_modal" class="text-[#00bfa5] cursor-pointer hover:underline">Terms & Conditions</label>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Decorative Background -->
+        <div class="absolute bottom-50">
+            <img src="{% static 'images/bgLishtRight.png' %}" alt="">
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <input type="checkbox" id="verify_modal" class="modal-toggle" />
+    <div class="modal backdrop-blur-sm" role="dialog">
+      <div class="modal-box max-w-3xl w-11/12 bg-white/5 text-white rounded-2xl border border-white/20 shadow-2xl relative p-8">
+          
+          <!-- Close Button -->
+          <label for="verify_modal" class="absolute top-4 right-4 text-gray-300 hover:text-white cursor-pointer text-2xl">✕</label>
+
+          <!-- Logo -->
+          <div class="flex justify-center mb-6">
+            <img src="{% static 'images/TournuaLogo.png' %}" alt="Tournuá Logo" class="h-32 w-32">
+          </div>
+
+          <!-- Title -->
+          <h2 class="text-3xl font-bold text-center text-[#00bfa5] mb-4">Terms & Conditions</h2>
+          <p class="text-gray-200 text-lg text-center mb-5">
+            By using <span class="text-[#00bfa5] font-semibold">Tournuá</span>, you agree to the following:
+          </p>
+
+          <!-- Terms List -->
+          <ol class="list-decimal list-inside space-y-2 text-[16px] text-gray-100 leading-relaxed">
+              <li><b>Eligibility –</b> You must be 13+ to use this platform. Under 18 requires guardian consent.</li>
+              <li><b>Accounts –</b> Provide accurate details and keep your login secure. Fake accounts are not allowed.</li>
+              <li><b>Use of Service –</b> You may create/join tournaments. Don’t misuse the platform (cheating, offensive content, illegal use).</li>
+              <li><b>Content –</b> You own your data (team names, scores, etc.) but grant us permission to display and process it.</li>
+              <li><b>Privacy –</b> Your personal data is protected. We don’t sell it to third parties.</li>
+              <li><b>Disclaimer –</b> Results and scores are user-generated. We are not responsible for errors or disputes.</li>
+              <li><b>Termination –</b> Accounts may be suspended for violating these terms.</li>
+              <li><b>Governing Law –</b> These terms follow the laws of Bangladesh.</li>
+          </ol>
+
+          <!-- Divider -->
+          <hr class="my-4 border-white/20">
+
+          <!-- Footer -->
+          <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-lg">
+              <p class="text-gray-300"><b>📧 Contact:</b> tournua.official@gmail.com</p>
+              <!-- Got It Button -->
+              <label for="verify_modal" class="btn bg-[#000000] text-white rounded-3xl px-6 border-[#13898B] border-2 hover:scale-105 transition cursor-pointer">
+                  Got It
+              </label>
+          </div>
+      </div>
+      <label class="modal-backdrop" for="verify_modal">Close</label>
+    </div>
+
+
+<input type="checkbox" id="forget_password_modal" class="modal-toggle" {% if show_step2 or error %}checked{% endif %} />
+<div class="modal backdrop-blur-sm" role="dialog" {% if show_step2 %}open{% endif %}>
+  <div class="modal-box w-11/12 max-w-md bg-white/10 text-white rounded-2xl border border-white/20 shadow-2xl relative p-6 sm:p-8">
+
+    <!-- Close Button -->
+    <label for="forget_password_modal" class="absolute right-4 top-4 text-gray-300 hover:text-white cursor-pointer text-2xl">✕</label>
+
+    <!-- Step 1: Email Input -->
+    {% if not show_step2 %}
+    <form action="{% url 'send_otp' %}" method="post" class="space-y-6">
+      {% csrf_token %}
+      <h2 class="text-2xl font-semibold text-center tracking-wide">Forgot Password</h2>
+      <p class="text-center text-gray-300">Enter your registered email</p>
+
+      <input
+        type="email"
+        name="email"
+        placeholder="Enter your email"
+        required
+        class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg"
+      />
+
+      {% if error %}
+        <p class="text-red-400 text-center">{{ error }}</p>
+      {% endif %}
+
+      <div class="flex justify-center mt-6">
+        <button
+          type="submit"
+          class="btn bg-[#13898B] hover:bg-[#0f6c6d] text-white rounded-3xl px-10 border-none transition duration-200"
+        >
+          Send OTP
+        </button>
+      </div>
+    </form>
+    {% endif %}
+
+
+    <!-- Step 2: OTP + New Password -->
+    {% if show_step2 %}
+    <form action="{% url 'reset_password' %}" method="post" class="space-y-5">
+      {% csrf_token %}
+      <h2 class="text-2xl font-semibold text-center tracking-wide">Reset Password</h2>
+      <input type="hidden" name="email" value="{{ email }}">
+
+      <input
+        type="text"
+        name="otp"
+        placeholder="Enter OTP"
+        required
+        class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg"
+      />
+
+      <input
+        type="password"
+        name="new_password"
+        placeholder="Enter new password"
+        required
+        class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg"
+      />
+
+      <input
+        type="password"
+        name="confirm_password"
+        placeholder="Confirm password"
+        required
+        class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:border-[#13898B] border-white/30 rounded-lg"
+      />
+
+      {% if error %}
+        <p class="text-red-400 text-center">{{ error }}</p>
+      {% endif %}
+
+      <div class="flex justify-center mt-6">
+        <button
+          type="submit"
+          class="btn bg-[#13898B] hover:bg-[#0f6c6d] text-white rounded-3xl px-10 border-none transition duration-200"
+        >
+          Reset Password
+        </button>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+
+  <label class="modal-backdrop" for="forget_password_modal">Close</label>
+</div>
+
+
+
+
+</body>
+</html>

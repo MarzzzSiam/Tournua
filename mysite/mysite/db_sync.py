@@ -85,7 +85,6 @@ def download_database():
         with urllib.request.urlopen(request, timeout=60) as response, open(temporary, "wb") as handle:
             shutil.copyfileobj(response, handle)
         os.replace(temporary, dest)
-        _restore_probe_match(dest)
     except (urllib.error.URLError, TimeoutError, OSError):
         if os.path.exists(temporary):
             os.remove(temporary)
@@ -93,23 +92,6 @@ def download_database():
             _seed_database(dest)
         return False
     return True
-
-
-def _restore_probe_match(dest):
-    """Undo a deployment check that marked match 127 as played at 0-0."""
-    import sqlite3
-
-    connection = sqlite3.connect(dest)
-    try:
-        changed = connection.execute(
-            "UPDATE tournua_match SET played = 0 "
-            "WHERE id = 127 AND team1_score = 0 AND team2_score = 0 AND played = 1"
-        ).rowcount
-        connection.commit()
-    finally:
-        connection.close()
-    if changed:
-        upload_database()
 
 
 def upload_database():
